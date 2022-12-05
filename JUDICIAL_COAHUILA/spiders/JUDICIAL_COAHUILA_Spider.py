@@ -1,12 +1,10 @@
-import io
 import json
-import numpy as np
-from tabula import read_pdf
-from tabulate import tabulate
-# from camelot import read_pdf
-import pandas as pd
-import scrapy
 from urllib import request
+
+import numpy as np
+import scrapy
+from tabula import read_pdf
+
 
 class JudicialCoahuilaSpider(scrapy.Spider):
     name = 'JUDICIAL_COAHUILA_Spider'
@@ -22,11 +20,12 @@ class JudicialCoahuilaSpider(scrapy.Spider):
     def parse_distrito(self, response):
         listJuzgado = json.loads(response.text)
         for lsj in listJuzgado:
-            for year in ['2015','2016','2017','2018','2019','2020','2021','2022']:
+            for year in ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022']:
                 url = f'https://plataforma-web-api.justiciadigital.gob.mx/listas_de_acuerdos?autoridad_id={lsj["id"]}&ano={year}'
-                yield scrapy.Request(url=url, callback=self.parse_juzgado, meta={'materia':lsj['materia'], 'juzgado':lsj['autoridad']})
+                yield scrapy.Request(url=url, callback=self.parse_juzgado,
+                                     meta={'materia': lsj['materia'], 'juzgado': lsj['autoridad']})
 
-    def parse_juzgado(self,response):
+    def parse_juzgado(self, response):
         listArchivo = json.loads(response.text)
         for lsj in listArchivo:
             fecha = lsj['fecha']
@@ -38,13 +37,9 @@ class JudicialCoahuilaSpider(scrapy.Spider):
                 downloaded = False
             if downloaded == False:
                 continue
-            readPDF = read_pdf(lsj['archivo'] , pages='all', multiple_tables=True, pandas_options={'headers':None})
+            readPDF = read_pdf(lsj['archivo'], pages='all', multiple_tables=True, pandas_options={'headers': None})
             for table in readPDF:
                 for col in range(len(table.columns)):
                     column = table[col].replace(np.nan, '\n')
                     Columntxt = ' '.join(list(column))
-                    # uptill here we get text from whole column seprated by \n 
-
-
-
-
+                    # uptill here we get text from whole column seprated by \n , from onw \n to next str is one row in column
