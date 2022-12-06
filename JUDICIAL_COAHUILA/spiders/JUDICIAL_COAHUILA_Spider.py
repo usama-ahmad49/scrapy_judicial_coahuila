@@ -1,11 +1,33 @@
 import json
+import re
 from urllib import request
 
 import numpy as np
 import scrapy
 from tabula import read_pdf
 
+def remove_accents(string):
+    string = re.sub(u"[àáâãäå]", 'a', string)
+    string = re.sub(u"[èéêë]", 'e', string)
+    string = re.sub(u"[ìíîï]", 'i', string)
+    string = re.sub(u"[òóôõö]", 'o', string)
+    string = re.sub(u"[ùúûü]", 'u', string)
+    # string = re.sub(u"[ýÿ]", 'y', string)
+    # string = re.sub(u"[ñ]", 'n', string)
 
+    string = re.sub(u"[ÀÁÂÃÄÅ]", 'A', string)
+    string = re.sub(u"[ÈÉÊË]", 'E', string)
+    string = re.sub(u"[ÌÍÎÏ]", 'I', string)
+    string = re.sub(u"[ÒÓÔÕÖ]", 'O', string)
+    string = re.sub(u"[ÙÚÛÜ]", 'U', string)
+    # string = re.sub(u"[ÝŸ]", 'Y', string)
+    # string = re.sub(u"[Ñ]", 'N', string)
+
+    string = re.sub(u"[()~!@#$%^&*=-]",'',string)
+    string = re.sub(u"[\t\n\r]", "", string)
+
+    string = re.sub(u"[-]", "", string)
+    return string
 class JudicialCoahuilaSpider(scrapy.Spider):
     name = 'JUDICIAL_COAHUILA_Spider'
     # allowed_domains = ['www.pjecz.gob.mx']
