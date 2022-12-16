@@ -32,7 +32,8 @@ def remove_accents(string):
     return string
 
 
-readPDF = read_pdf('2019-12-20-lista-de-acuerdos.pdf', pages='all' ,multiple_tables=True, pandas_options={'header':None})
+readPDF = read_pdf('2021-12-17-LISTA-DE-ACUERDOS-NL0Q9gd5.pdf', pages='all' ,multiple_tables=True, pandas_options={'header':None})
+# readPDF = read_pdf('2019-12-20-lista-de-acuerdos.pdf', pages='all' ,multiple_tables=True, pandas_options={'header':None})
 for table in readPDF:
     listofdicts = []
     for col in range(len(table.columns)):
