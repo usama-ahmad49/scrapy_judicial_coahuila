@@ -32,11 +32,12 @@ def remove_accents(string):
     return string
 
 
-readPDF = read_pdf('2021-12-17-LISTA-DE-ACUERDOS-NL0Q9gd5.pdf', pages='all' ,multiple_tables=True, pandas_options={'header':None})
+readPDF = read_pdf('2021-12-17-LISTA-DE-ACUERDOS-NL0Q9gd5.pdf', stream=True,area = [150,12.75,790.5,561],pages='all' ,multiple_tables=True, pandas_options={'header':None})
 # readPDF = read_pdf('2019-12-20-lista-de-acuerdos.pdf', pages='all' ,multiple_tables=True, pandas_options={'header':None})
 for table in readPDF:
+    table.drop(columns = table.columns[0], axis = 1, inplace= True)
     listofdicts = []
-    for col in range(len(table.columns)):
+    for col in range(1,len(table.columns)):
         flag = False
         column = table[col].replace(np.nan, '\n')
         ColumntxtList = ' '.join(list(column)).split('\n')
